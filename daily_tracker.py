@@ -1,10 +1,9 @@
 import requests
-import csv
 import os
+import pandas as pd # Now using pandas for the logic
 from datetime import datetime
 
-# 1. READ SECRETS FROM ENVIRONMENT VARIABLES
-# We will set these in GitHub Settings later
+# 1. READ SECRETS
 APP_ID = os.environ.get("ADZUNA_APP_ID")
 APP_KEY = os.environ.get("ADZUNA_APP_KEY")
 FILE_NAME = "job_market_history.csv"
@@ -28,28 +27,50 @@ def get_daily_job_count(title, country="us"):
 def update_history(titles):
     today = datetime.now().strftime("%Y-%m-%d")
     
-    # Check if file exists to determine if we need a header
-    file_exists = os.path.isfile(FILE_NAME)
+    # 2. Collect today's data in a dictionary
+    # This is safer than a list because it links value to key (Title)
+    current_data = {"Date": today}
     
-    row = {"Date": today}
     print(f"--- Log for {today} ---")
-    
     for title in titles:
         count = get_daily_job_count(title)
-        row[title] = count
+        current_data[title] = count
         print(f"{title}: {count}")
 
-    with open(FILE_NAME, mode='a', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=["Date"] + titles)
-        if not file_exists:
-            writer.writeheader()
-        writer.writerow(row)
+    # 3. Load existing history safely
+    if os.path.exists(FILE_NAME):
+        try:
+            history_df = pd.read_csv(FILE_NAME)
+        except pd.errors.EmptyDataError:
+            # Handle case where file exists but is empty
+            history_df = pd.DataFrame()
+    else:
+        history_df = pd.DataFrame()
+
+    # 4. Merge old history with new data
+    # Create a 1-row DataFrame for today
+    today_df = pd.DataFrame([current_data])
+    
+    # pd.concat is the "future-proof" magic.
+    # It aligns columns by name. If 'today_df' has a new title, 
+    # pandas adds that column to the whole dataset automatically.
+    updated_df = pd.concat([history_df, today_df], ignore_index=True)
+    
+    # 5. Save back to CSV
+    updated_df.to_csv(FILE_NAME, index=False)
+    print(f"Saved to {FILE_NAME}")
 
 if __name__ == "__main__":
-    # You can change these titles to whatever you want
-    target_roles = ["Machine Learning Engineer", "Data Scientist", "Data Engineer", 
-                    "AI Researcher", "Software Engineer", "AI Engineer"]
+    # You can now add/remove titles here freely!
+    target_roles = [
+        "Machine Learning Engineer", 
+        "Data Scientist", 
+        "Data Analyst",
+        "Data Engineer",        # Added this
+        "Director of Data"      # Added this
+    ]
+    
     if APP_ID and APP_KEY:
         update_history(target_roles)
     else:
-        print("Error: API Keys not found in environment variables.")
+        print("Error: API Keys not found.")
