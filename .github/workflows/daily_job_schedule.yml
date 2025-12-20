@@ -2,17 +2,14 @@ name: Daily Job Market Tracker
 
 on:
   schedule:
-    # This cron syntax means "Run at 00:00 (Midnight) UTC every day"
-    - cron: '0 0 * * *'
-  # This allows you to run it manually from the "Actions" tab for testing
-  workflow_dispatch:
+    - cron: '0 0 * * *' # Runs at Midnight UTC
+  workflow_dispatch:      # Allows manual testing
 
 jobs:
   update-data:
     runs-on: ubuntu-latest
     
     permissions:
-      # Give the action permission to write to your repo
       contents: write
 
     steps:
@@ -25,21 +22,28 @@ jobs:
           python-version: '3.9'
 
       - name: Install dependencies
+        # Added pandas and matplotlib here
         run: |
-          pip install requests
+          pip install requests pandas matplotlib
 
       - name: Run tracking script
         env:
-          # This injects the secrets into the Python script
           ADZUNA_APP_ID: ${{ secrets.ADZUNA_APP_ID }}
           ADZUNA_APP_KEY: ${{ secrets.ADZUNA_APP_KEY }}
         run: python daily_tracker.py
+
+      - name: Generate Trend Graph
+        # This runs the new script to create the PNG
+        run: python plot_trends.py
 
       - name: Commit and Push Data
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          git add job_market_history.csv
-          # The '|| exit 0' ensures the action doesn't fail if there are no changes
-          git commit -m "Update daily job stats" || exit 0
+          
+          # Add BOTH the CSV and the PNG to the commit
+          git add job_market_history.csv job_market_trends.png
+          
+          # Commit and push
+          git commit -m "Update daily job stats and graph" || exit 0
           git push
