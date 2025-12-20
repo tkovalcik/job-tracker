@@ -47,7 +47,8 @@ def update_history(titles):
 
 if __name__ == "__main__":
     # You can change these titles to whatever you want
-    target_roles = ["Machine Learning Engineer", "Data Scientist", "Data Analyst"]
+    target_roles = ["Machine Learning Engineer", "Data Scientist", "Data Engineer", 
+                    "AI Researcher", "Software Engineer", "AI Engineer"]
     if APP_ID and APP_KEY:
         update_history(target_roles)
     else:
