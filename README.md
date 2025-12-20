@@ -1,5 +1,5 @@
 # 📈 Automated Job Market Tracker
-![Daily Job Market Tracker](https://github.com/<YOUR_USERNAME>/<YOUR_REPO_NAME>/actions/workflows/daily_job_schedule.yml/badge.svg)
+![Daily Job Market Tracker](https://github.com/tkovalcik/job-tracker/actions/workflows/daily_job_schedule.yml/badge.svg)
 
 A daily data pipeline that tracks the volume of new job postings for Data Science and Machine Learning roles.
 
