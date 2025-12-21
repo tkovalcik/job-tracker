@@ -66,8 +66,10 @@ if __name__ == "__main__":
         "Machine Learning Engineer", 
         "Data Scientist", 
         "Data Analyst",
-        "Data Engineer",        # Added this
-        "Director of Data"      # Added this
+        "Data Engineer",
+        "AI Engineer",
+        "Software Engineer",
+        "AI Researcher"
     ]
     
     if APP_ID and APP_KEY:
