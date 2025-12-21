@@ -25,13 +25,13 @@ def get_daily_job_count(title, country="us"):
         return 0
 
 def update_history(titles):
-    today = datetime.now().strftime("%Y-%m-%d")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     # 2. Collect today's data in a dictionary
     # This is safer than a list because it links value to key (Title)
-    current_data = {"Date": today}
+    current_data = {"Date": timestamp}
     
-    print(f"--- Log for {today} ---")
+    print(f"--- Log for {timestamp} ---")
     for title in titles:
         count = get_daily_job_count(title)
         current_data[title] = count
