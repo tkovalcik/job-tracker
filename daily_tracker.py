@@ -65,11 +65,12 @@ if __name__ == "__main__":
     target_roles = [
         "Machine Learning Engineer", 
         "Data Scientist", 
-        "Data Analyst",
         "Data Engineer",
         "AI Engineer",
         "Software Engineer",
-        "AI Researcher"
+        "AI Researcher",
+        "Product Manager",
+        "Technical Program Manager"
     ]
     
     if APP_ID and APP_KEY:

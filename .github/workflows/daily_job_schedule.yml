@@ -24,7 +24,7 @@ jobs:
       - name: Install dependencies
         # Added pandas and matplotlib here
         run: |
-          pip install requests pandas matplotlib
+          pip install requests pandas matplotlib plotly
 
       - name: Run tracking script
         env:
@@ -41,9 +41,9 @@ jobs:
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
           
-          # Add BOTH the CSV and the PNG to the commit
-          git add job_market_history.csv job_market_trends.png
+          # Add the CSV, the PNG, AND the new HTML file
+          git add job_market_history.csv job_market_trends.png index.html
           
           # Commit and push
-          git commit -m "Update daily job stats and graph" || exit 0
+          git commit -m "Update daily stats and dashboard" || exit 0
           git push
