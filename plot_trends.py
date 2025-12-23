@@ -28,7 +28,7 @@ def generate_graphs():
     
     # Group by 'Day' and take the .last() entry for every column
     # This keeps the last timestamp of that day and the last data values
-    df_daily = df.groupby('Day').last().reset_index(drop=True)
+    df_daily = df.groupby('Date').last().reset_index(drop=True)
 
     # 3. FILTER LOGIC (Show only roles active in the most recent run)
     # Get the last row of data
