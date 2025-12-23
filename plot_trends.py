@@ -20,11 +20,11 @@ def generate_graphs():
         return
 
     # 1. Convert Date to datetime objects
-    df['Date'] = pd.to_datetime(df['Date'])
+    df['Date'] = pd.to_datetime(df['Date'], format='mixed', errors='coerce')
     
     # 2. AGGREGATION LOGIC (Collapse multiple runs per day)
     # Create a temporary 'Day' column just for grouping
-    df['Day'] = df['Date'].dt.date
+    df['Date'] = df['Date'].dt.date
     
     # Group by 'Day' and take the .last() entry for every column
     # This keeps the last timestamp of that day and the last data values
